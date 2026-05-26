@@ -1,0 +1,13 @@
+.root {
+  opacity: 0;
+  transform: translateY(var(--fade-y, 24px));
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s ease;
+  will-change: opacity, transform;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

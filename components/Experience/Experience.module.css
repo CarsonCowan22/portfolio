@@ -1,0 +1,92 @@
+.section {
+  border-top: 1px solid var(--border);
+  padding: 6rem 0;
+}
+
+.inner {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.labelColumn {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(2rem, 3.5vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.intro {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+.list {
+  border-top: 1px solid var(--border);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.company {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.role,
+.date {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.date {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 5rem 0;
+  }
+
+  .inner {
+    width: min(1100px, calc(100% - 1rem));
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .date {
+    text-align: left;
+  }
+}

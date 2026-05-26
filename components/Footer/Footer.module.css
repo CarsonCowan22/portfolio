@@ -1,0 +1,41 @@
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0 4rem;
+}
+
+.inner {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.copy,
+.link {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.link {
+  transition: color 0.2s ease;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .inner {
+    width: min(1100px, calc(100% - 1rem));
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
