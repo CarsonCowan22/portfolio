@@ -23,11 +23,21 @@ type ImageSource = {
   fallbackPng: string;
 };
 
+const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/$/, '');
+
+function assetPath(path: string) {
+  if (!path.startsWith('/')) {
+    return `${basePath}/images/${path}`;
+  }
+
+  return `${basePath}${path}`;
+}
+
 function resolveImageSource(input: string): ImageSource {
-  const publicPath = input.startsWith('/') ? input : `/images/${input}`;
+  const publicPath = assetPath(input.startsWith('/') ? input : `/images/${input}`);
   const fileName = publicPath.split('/').pop() || '';
   const nameOnly = fileName.replace(/\.[^.]+$/, '');
-  const optimizedBase = `/images/optimized/${nameOnly}`;
+  const optimizedBase = assetPath(`/images/optimized/${nameOnly}`);
   const srcSet = [800, 1200, 1400].map((w) => `${optimizedBase}-${w}.webp ${w}w`).join(', ');
   const fallbackPng = `${optimizedBase}-optimized.png`;
 
