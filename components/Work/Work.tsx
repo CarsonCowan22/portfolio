@@ -16,7 +16,7 @@ const projects = [
     stack: ['Next.js', 'TypeScript', 'PostgreSQL', 'Vercel', 'GitHub Actions'],
     placeholderDescription: 'Privix dashboard screenshot, logged-in state',
     placeholderDimensions: '1200×800px minimum',
-    placeholderPath: 'privix.jpg',
+    placeholderPath: '/images/www.privix.com_project-details.png',
   },
   {
     eyebrow: '02 — WEB',
@@ -31,7 +31,7 @@ const projects = [
     stack: ['Next.js', 'React', 'PostgreSQL', 'Vercel'],
     placeholderDescription: 'TEC Solar homepage or full-page screenshot',
     placeholderDimensions: '1400×900px minimum',
-    placeholderPath: 'tec-solar.jpg',
+    placeholderPath: '/images/www.tecsolar.net_home.png',
     reverse: true,
   },
   {
@@ -47,7 +47,7 @@ const projects = [
     stack: ['Windows Scripting', 'Excel', 'AutoCAD'],
     placeholderDescription: 'Permit-ready CAD plan set or before/after workflow comparison',
     placeholderDimensions: 'High-resolution comparison or plan set',
-    placeholderPath: 'cad-automation.jpg',
+    placeholderPath: ['/images/cad-automation-1.png', '/images/cad-automation-2.png'],
   },
 ] as const;
 

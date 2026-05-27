@@ -1,7 +1,7 @@
 .card {
   display: flex;
   gap: 2rem;
-  align-items: stretch;
+  align-items: flex-start;
   padding: 2rem 0;
   border-top: 1px solid var(--border);
 }
@@ -97,8 +97,145 @@
 }
 
 .media {
+  display: block;
+  align-items: center;
+  gap: 1rem;
+}
+/* Make images fit the same height as the text column so they don't extend the section
+   The picture container limits width but matches the card height; the img scales by height. */
+.media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(520px, 60vh);
+  object-fit: contain; /* show entire drawing without cropping */
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Carousel styles */
+.carousel {
+  position: relative;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  min-height: min(520px, 60vh);
+  border-radius: 8px;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0.75rem;
+  opacity: 0;
+  transition: opacity 420ms ease;
+  pointer-events: none;
+}
+
+.slideActive {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slide picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+}
+
+.thumbnails {
   display: flex;
-  align-items: stretch;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.thumbnail {
+  position: relative;
+  width: 92px;
+  height: 62px;
+  padding: 0;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  background: rgba(10, 10, 10, 0.85);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.thumbnail:hover,
+.thumbnailActive {
+  opacity: 1;
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.thumbnail picture,
+.thumbnailImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.thumbnailImage {
+  object-fit: cover;
+}
+
+.prev,
+.next {
+  display: none;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+}
+
+.activeDot {
+  background: rgba(255,255,255,0.95);
+}
+
+@media (max-width: 900px) {
+  .media {
+    align-items: center;
+  }
+  .media img {
+    height: auto;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .frame {
+    min-height: min(360px, 52vh);
+  }
+
+  .thumbnail {
+    width: 78px;
+    height: 52px;
+  }
 }
 
 @media (max-width: 900px) {
