@@ -58,9 +58,12 @@ jobs:
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
-      - name: Enable pnpm
+      - name: Setup pnpm
         if: steps.detect-package-manager.outputs.manager == 'pnpm'
-        run: corepack enable
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+          run_install: false
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
