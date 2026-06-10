@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const instrumentSerif = localFont({
@@ -46,6 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${instrumentSerif.variable} ${geistMono.variable}`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
