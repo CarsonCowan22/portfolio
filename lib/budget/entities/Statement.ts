@@ -1,11 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 /**
  * One ingested statement (one account, one period). `reconciled` blocks a statement's
  * transactions from counting toward "final" totals until opening_balance + sum(amount) ==
  * closing_balance within $0.01, or a human overrides it with a documented reason.
+ *
+ * Unique on (source_file, account) so re-ingesting the same statement updates this row instead
+ * of duplicating it -- the same idempotency guarantee transactions get from their stable id.
  */
 @Entity('statements')
+@Unique(['sourceFile', 'account'])
 export class Statement {
   @PrimaryGeneratedColumn()
   id!: number;
