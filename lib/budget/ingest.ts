@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
 import { getBudgetDataSource } from './dataSource';
-import { CategoryRule } from './entities/CategoryRule';
-import { Statement } from './entities/Statement';
-import { Transaction } from './entities/Transaction';
+import type { CategoryRule } from './entities/CategoryRule';
+import type { Statement } from './entities/Statement';
+import type { Transaction } from './entities/Transaction';
 import { parseBankStatement } from './parser/bankStatement';
 import type { ParseGap, ParsedTransaction, StatementPeriod } from './parser/types';
 import { categorize, loadRules } from './rules';
@@ -78,8 +78,8 @@ export async function ingestBankStatement(input: IngestBankStatementInput): Prom
   const accountNames = Array.from(new Set([...Array.from(byAccount.keys()), ...accountSummaries.map((s) => s.account)]));
 
   const accounts = await dataSource.transaction(async (manager) => {
-    const statementRepo = manager.getRepository(Statement);
-    const txnRepo = manager.getRepository(Transaction);
+    const statementRepo = manager.getRepository<Statement>('Statement');
+    const txnRepo = manager.getRepository<Transaction>('Transaction');
     const results: IngestAccountResult[] = [];
 
     for (const account of accountNames) {

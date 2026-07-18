@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { EntitySchema } from 'typeorm';
 
 export type CategoryRuleMatchType = 'keyword' | 'regex';
 export type CategoryRuleCreatedBy = 'seed' | 'carson' | 'claude_code';
@@ -8,32 +8,38 @@ export type CategoryRuleCreatedBy = 'seed' | 'carson' | 'claude_code';
  * (ascending -- lower runs first); the first match wins. This table is the entire answer to
  * "why is this transaction categorized this way" -- nothing about categorization lives in code.
  */
-@Entity('category_rules')
-export class CategoryRule {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column({ type: 'text' })
-  category!: string;
-
-  @Column({ name: 'match_type', type: 'varchar', length: 16 })
-  matchType!: CategoryRuleMatchType;
-
-  @Column({ type: 'text' })
-  pattern!: string;
-
-  @Column({ type: 'int' })
-  priority!: number;
-
-  @Column({ name: 'created_by', type: 'varchar', length: 16, default: "'carson'" })
-  createdBy!: CategoryRuleCreatedBy;
-
-  @Column({ type: 'text', nullable: true })
-  notes!: string | null;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+export interface CategoryRule {
+  id: number;
+  category: string;
+  matchType: CategoryRuleMatchType;
+  pattern: string;
+  priority: number;
+  createdBy: CategoryRuleCreatedBy;
+  notes: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+/**
+ * Defined via EntitySchema (a plain object) rather than @Entity()-decorated class. Next.js
+ * bundles Server Actions into a chunk isolated from the module that builds the DataSource, so a
+ * decorator-based class ends up duplicated as two distinct objects in production -- and since
+ * decorator metadata is keyed to class identity (and the production minifier renames classes
+ * inconsistently across those chunks), `getRepository()` throws "No metadata found" from the
+ * "wrong" copy. EntitySchema's `name` is a literal string in source, immune to both problems.
+ */
+export const CategoryRuleEntity = new EntitySchema<CategoryRule>({
+  name: 'CategoryRule',
+  tableName: 'category_rules',
+  columns: {
+    id: { type: 'int', primary: true, generated: true },
+    category: { type: 'text' },
+    matchType: { name: 'match_type', type: 'varchar', length: 16 },
+    pattern: { type: 'text' },
+    priority: { type: 'int' },
+    createdBy: { name: 'created_by', type: 'varchar', length: 16, default: 'carson' },
+    notes: { type: 'text', nullable: true },
+    createdAt: { name: 'created_at', type: 'timestamptz', createDate: true },
+    updatedAt: { name: 'updated_at', type: 'timestamptz', updateDate: true },
+  },
+});

@@ -2,7 +2,7 @@ import './budgetLoadEnv';
 import fs from 'node:fs';
 import path from 'node:path';
 import { getBudgetDataSource } from '../lib/budget/dataSource';
-import { CategoryRule, CategoryRuleMatchType } from '../lib/budget/entities/CategoryRule';
+import type { CategoryRule, CategoryRuleMatchType } from '../lib/budget/entities/CategoryRule';
 
 interface SeedRuleGroup {
   category: string;
@@ -17,7 +17,7 @@ async function main() {
   const groups: SeedRuleGroup[] = JSON.parse(fs.readFileSync(seedPath, 'utf-8'));
 
   const dataSource = await getBudgetDataSource();
-  const repo = dataSource.getRepository(CategoryRule);
+  const repo = dataSource.getRepository<CategoryRule>('CategoryRule');
 
   // Re-running this script re-seeds from scratch -- only rows this script created (created_by =
   // 'seed') are replaced, so Carson's own manual rules and Claude-Code-authored rules are untouched.

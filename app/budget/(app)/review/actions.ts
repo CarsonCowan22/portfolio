@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { getBudgetDataSource } from '@/lib/budget/dataSource';
-import { CategoryRule } from '@/lib/budget/entities/CategoryRule';
-import { Transaction } from '@/lib/budget/entities/Transaction';
+import type { CategoryRule } from '@/lib/budget/entities/CategoryRule';
+import type { Transaction } from '@/lib/budget/entities/Transaction';
 
 function revalidateBudgetPages() {
   revalidatePath('/budget');
@@ -23,8 +23,13 @@ export async function categorizeTransaction(input: {
     let ruleId: number | null = null;
 
     if (input.createRule) {
-      const rule = await manager.getRepository(CategoryRule).save(
-        manager.getRepository(CategoryRule).create({
+      // Repositories are resolved by entity NAME (string), not a class reference: Next.js
+      // compiles this 'use server' file into a bundle isolated from the module that builds the
+      // DataSource, so a decorator-based class ends up duplicated across bundles and the
+      // minifier renames it inconsistently -- entities/*.ts uses TypeORM's EntitySchema (a
+      // plain object with a literal `name`) specifically so this string lookup is stable.
+      const rule = await manager.getRepository<CategoryRule>('CategoryRule').save(
+        manager.getRepository<CategoryRule>('CategoryRule').create({
           category: input.category,
           matchType: input.createRule.matchType,
           pattern: input.createRule.pattern,
@@ -35,7 +40,7 @@ export async function categorizeTransaction(input: {
       ruleId = rule.id;
     }
 
-    await manager.getRepository(Transaction).update(input.id, {
+    await manager.getRepository<Transaction>('Transaction').update(input.id, {
       category: input.category,
       categorySource: 'manual',
       categoryRule: ruleId ? ({ id: ruleId } as CategoryRule) : null,
@@ -49,7 +54,7 @@ export async function categorizeTransaction(input: {
 export async function bulkCategorize(ids: string[], category: string) {
   if (ids.length === 0) return;
   const dataSource = await getBudgetDataSource();
-  await dataSource.getRepository(Transaction).update(ids, {
+  await dataSource.getRepository<Transaction>('Transaction').update(ids, {
     category,
     categorySource: 'manual',
     needsReview: false,
@@ -59,6 +64,6 @@ export async function bulkCategorize(ids: string[], category: string) {
 
 export async function setFlaggedForFollowUp(id: string, flagged: boolean) {
   const dataSource = await getBudgetDataSource();
-  await dataSource.getRepository(Transaction).update(id, { flaggedForFollowUp: flagged });
+  await dataSource.getRepository<Transaction>('Transaction').update(id, { flaggedForFollowUp: flagged });
   revalidateBudgetPages();
 }

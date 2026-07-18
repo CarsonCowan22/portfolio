@@ -1,16 +1,16 @@
 import { getBudgetDataSource } from './dataSource';
-import { CategoryRule } from './entities/CategoryRule';
-import { Statement } from './entities/Statement';
-import { Transaction } from './entities/Transaction';
+import type { CategoryRule } from './entities/CategoryRule';
+import type { Statement } from './entities/Statement';
+import type { Transaction } from './entities/Transaction';
 
 export async function getStatements(): Promise<Statement[]> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository(Statement).find({ order: { periodStart: 'DESC' } });
+  return dataSource.getRepository<Statement>('Statement').find({ order: { periodStart: 'DESC' } });
 }
 
 export async function getNeedsReviewTransactions(limit = 300): Promise<Transaction[]> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository(Transaction).find({
+  return dataSource.getRepository<Transaction>('Transaction').find({
     where: { needsReview: true },
     relations: { categoryRule: true },
     order: { date: 'DESC', amount: 'ASC' },
@@ -20,18 +20,18 @@ export async function getNeedsReviewTransactions(limit = 300): Promise<Transacti
 
 export async function getNeedsReviewCount(): Promise<number> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository(Transaction).count({ where: { needsReview: true } });
+  return dataSource.getRepository<Transaction>('Transaction').count({ where: { needsReview: true } });
 }
 
 export async function getCategoryRules(): Promise<CategoryRule[]> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository(CategoryRule).find({ order: { priority: 'ASC', id: 'ASC' } });
+  return dataSource.getRepository<CategoryRule>('CategoryRule').find({ order: { priority: 'ASC', id: 'ASC' } });
 }
 
 export async function getDistinctCategories(): Promise<string[]> {
   const dataSource = await getBudgetDataSource();
   const rows: { category: string }[] = await dataSource
-    .getRepository(Transaction)
+    .getRepository<Transaction>('Transaction')
     .createQueryBuilder('t')
     .select('DISTINCT t.category', 'category')
     .where('t.category IS NOT NULL')
@@ -43,7 +43,7 @@ export async function getDistinctCategories(): Promise<string[]> {
 export async function getDistinctAccounts(): Promise<string[]> {
   const dataSource = await getBudgetDataSource();
   const rows: { account: string }[] = await dataSource
-    .getRepository(Transaction)
+    .getRepository<Transaction>('Transaction')
     .createQueryBuilder('t')
     .select('DISTINCT t.account', 'account')
     .orderBy('t.account', 'ASC')
@@ -64,7 +64,7 @@ export interface TransactionFilters {
 export async function getFilteredTransactions(filters: TransactionFilters, limit = 500): Promise<Transaction[]> {
   const dataSource = await getBudgetDataSource();
   const qb = dataSource
-    .getRepository(Transaction)
+    .getRepository<Transaction>('Transaction')
     .createQueryBuilder('t')
     .leftJoinAndSelect('t.categoryRule', 'rule')
     .orderBy('t.date', 'DESC')

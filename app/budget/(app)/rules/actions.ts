@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { getBudgetDataSource } from '@/lib/budget/dataSource';
-import { CategoryRule, CategoryRuleMatchType } from '@/lib/budget/entities/CategoryRule';
+import type { CategoryRule, CategoryRuleMatchType } from '@/lib/budget/entities/CategoryRule';
 
 function revalidateBudgetPages() {
   revalidatePath('/budget');
@@ -21,7 +21,9 @@ export interface RuleInput {
 
 export async function createRule(input: RuleInput) {
   const dataSource = await getBudgetDataSource();
-  const repo = dataSource.getRepository(CategoryRule);
+  // Resolved by entity NAME, not class reference -- see the comment in review/actions.ts for why
+  // (Next.js bundles this 'use server' file separately from the DataSource's own module).
+  const repo = dataSource.getRepository<CategoryRule>('CategoryRule');
   await repo.save(
     repo.create({
       category: input.category,
@@ -37,7 +39,7 @@ export async function createRule(input: RuleInput) {
 
 export async function updateRule(id: number, input: RuleInput) {
   const dataSource = await getBudgetDataSource();
-  await dataSource.getRepository(CategoryRule).update(id, {
+  await dataSource.getRepository<CategoryRule>('CategoryRule').update(id, {
     category: input.category,
     matchType: input.matchType,
     pattern: input.pattern,
@@ -51,6 +53,6 @@ export async function deleteRule(id: number) {
   const dataSource = await getBudgetDataSource();
   // Transactions referencing this rule keep their existing category (ON DELETE SET NULL only
   // clears category_rule_id, not category) -- deleting a rule never un-categorizes past decisions.
-  await dataSource.getRepository(CategoryRule).delete(id);
+  await dataSource.getRepository<CategoryRule>('CategoryRule').delete(id);
   revalidateBudgetPages();
 }

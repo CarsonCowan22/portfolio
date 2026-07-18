@@ -1,5 +1,5 @@
 import { getBudgetDataSource } from './dataSource';
-import { CategoryRule } from './entities/CategoryRule';
+import type { CategoryRule } from './entities/CategoryRule';
 
 export interface CategorizationMatch {
   category: string;
@@ -34,5 +34,5 @@ export function categorize(descriptionClean: string, rules: MatchableRule[]): Ca
 
 export async function loadRules(): Promise<CategoryRule[]> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository(CategoryRule).find({ order: { priority: 'ASC', id: 'ASC' } });
+  return dataSource.getRepository<CategoryRule>('CategoryRule').find({ order: { priority: 'ASC', id: 'ASC' } });
 }

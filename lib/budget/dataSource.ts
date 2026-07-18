@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import path from 'node:path';
 import { DataSource } from 'typeorm';
-import { CategoryRule } from './entities/CategoryRule';
-import { Statement } from './entities/Statement';
-import { Transaction } from './entities/Transaction';
+import { CategoryRuleEntity } from './entities/CategoryRule';
+import { StatementEntity } from './entities/Statement';
+import { TransactionEntity } from './entities/Transaction';
 
 /**
  * Single shared DataSource, exported for the TypeORM migration CLI (`budget:migration:generate`)
@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [Transaction, CategoryRule, Statement],
+  entities: [TransactionEntity, CategoryRuleEntity, StatementEntity],
   migrations: [path.join(__dirname, 'migrations', '*.{ts,js}')],
 });
 
