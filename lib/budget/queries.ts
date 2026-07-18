@@ -1,17 +1,22 @@
+import { In, Not } from 'typeorm';
 import { getBudgetDataSource } from './dataSource';
+import { ARCHIVED_ACCOUNTS } from './constants';
 import type { CategoryRule } from './entities/CategoryRule';
 import type { Statement } from './entities/Statement';
 import type { Transaction } from './entities/Transaction';
 
 export async function getStatements(): Promise<Statement[]> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository<Statement>('Statement').find({ order: { periodStart: 'DESC' } });
+  return dataSource.getRepository<Statement>('Statement').find({
+    where: { account: Not(In(ARCHIVED_ACCOUNTS)) },
+    order: { periodStart: 'DESC' },
+  });
 }
 
 export async function getNeedsReviewTransactions(limit = 300): Promise<Transaction[]> {
   const dataSource = await getBudgetDataSource();
   return dataSource.getRepository<Transaction>('Transaction').find({
-    where: { needsReview: true },
+    where: { needsReview: true, account: Not(In(ARCHIVED_ACCOUNTS)) },
     relations: { categoryRule: true },
     order: { date: 'DESC', amount: 'ASC' },
     take: limit,
@@ -20,7 +25,9 @@ export async function getNeedsReviewTransactions(limit = 300): Promise<Transacti
 
 export async function getNeedsReviewCount(): Promise<number> {
   const dataSource = await getBudgetDataSource();
-  return dataSource.getRepository<Transaction>('Transaction').count({ where: { needsReview: true } });
+  return dataSource
+    .getRepository<Transaction>('Transaction')
+    .count({ where: { needsReview: true, account: Not(In(ARCHIVED_ACCOUNTS)) } });
 }
 
 export async function getCategoryRules(): Promise<CategoryRule[]> {
@@ -46,6 +53,7 @@ export async function getDistinctAccounts(): Promise<string[]> {
     .getRepository<Transaction>('Transaction')
     .createQueryBuilder('t')
     .select('DISTINCT t.account', 'account')
+    .where('t.account NOT IN (:...archived)', { archived: ARCHIVED_ACCOUNTS })
     .orderBy('t.account', 'ASC')
     .getRawMany();
   return rows.map((row) => row.account);
@@ -67,6 +75,7 @@ export async function getFilteredTransactions(filters: TransactionFilters, limit
     .getRepository<Transaction>('Transaction')
     .createQueryBuilder('t')
     .leftJoinAndSelect('t.categoryRule', 'rule')
+    .where('t.account NOT IN (:...archived)', { archived: ARCHIVED_ACCOUNTS })
     .orderBy('t.date', 'DESC')
     .addOrderBy('t.id', 'ASC')
     .take(limit);

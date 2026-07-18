@@ -11,6 +11,7 @@ const CAVEATS = [
   'Honda Financial account closes after auction -- the remaining balance becomes a deficiency negotiation, not an ongoing loan payment.',
   'Childcare (Brightwheel) ends 7/30/26. The real recurring rate is $735/month -- don’t let a blended historical average stand in for it.',
   'Apr-Jun 2026 Capital One activity is sparse because spending moved to other cards -- don’t read that as reduced spending.',
+  '360 Checking and 360 Performance Savings are closed accounts -- excluded from every view/total here (see lib/budget/constants.ts), but their historical transactions are still in the database, untouched.',
 ];
 
 export default async function BudgetOverviewPage() {
