@@ -1,0 +1,210 @@
+[
+  {
+    "category": "INTERNAL_TRANSFER",
+    "matchType": "keyword",
+    "priority": 10,
+    "patterns": ["360 Checking XXXXXXX9601", "360 Performance Savings XXXXXXX2671", "Personal XXXXXXX9354"]
+  },
+  {
+    "category": "Credit Card Payment",
+    "matchType": "keyword",
+    "priority": 20,
+    "patterns": ["CAPITAL ONE MOBILE PMT", "CAPITAL ONE ONLINE PMT", "AMEX EPAYMENT"]
+  },
+  {
+    "category": "Auto Loan Payment (Honda)",
+    "matchType": "keyword",
+    "priority": 30,
+    "patterns": ["HONDA PMT"],
+    "notes": "Honda Financial account closes after auction; remaining balance becomes a deficiency negotiation, not an ongoing loan payment."
+  },
+  {
+    "category": "Childcare (Daycare)",
+    "matchType": "keyword",
+    "priority": 40,
+    "patterns": ["BRGHTWHL", "BRIGHTWHEEL"],
+    "notes": "Ends 7/30/26. Real recurring rate is $735/month -- don't let the blended historical average stand in for it."
+  },
+  {
+    "category": "Personal Loan (Upstart)",
+    "matchType": "keyword",
+    "priority": 50,
+    "patterns": ["UPSTART NETWORK", "CRB UPSTART LOAN"]
+  },
+  {
+    "category": "Loan Payment (Hughes FCU)",
+    "matchType": "keyword",
+    "priority": 60,
+    "patterns": ["SVL HUGHES FCU"],
+    "notes": "Zoe's vehicle (XC90); loan is in Carson's name and she makes payments. Flag -- do not count as Carson's expense by default until reimbursement status is confirmed."
+  },
+  {
+    "category": "Student Loan Payment",
+    "matchType": "keyword",
+    "priority": 70,
+    "patterns": ["DEPT EDUCATION STUDENT LN"],
+    "notes": "Deferred until Sep 2026 (partial unemployment)."
+  },
+  {
+    "category": "Income - Payroll/Contract",
+    "matchType": "keyword",
+    "priority": 80,
+    "patterns": ["GUSTO", "ECO HOME LLC", "PAYCHECK", "PAYROLL"]
+  },
+  {
+    "category": "Income - Other Employment",
+    "matchType": "keyword",
+    "priority": 90,
+    "patterns": ["HANDSHAKE AI", "EMPLOYEE BENEFIT PENSION"]
+  },
+  {
+    "category": "Income - Tax Refund",
+    "matchType": "keyword",
+    "priority": 100,
+    "patterns": ["IRS TREAS", "UTAHTAXRFD", "TAX REF"]
+  },
+  {
+    "category": "Income - Check Deposit",
+    "matchType": "keyword",
+    "priority": 110,
+    "patterns": ["CHECK DEPOSIT"]
+  },
+  {
+    "category": "Cash Advance Apps",
+    "matchType": "keyword",
+    "priority": 120,
+    "patterns": ["EARNIN", "BRIGIT", "DAVE COM", "DAVE INC", "DAVE MEMBERSHIP", "MONEY RECEIVED"]
+  },
+  {
+    "category": "BNPL (Klarna)",
+    "matchType": "keyword",
+    "priority": 130,
+    "patterns": ["KLARNA"]
+  },
+  {
+    "category": "Peer Transfers (Venmo/Cash)",
+    "matchType": "keyword",
+    "priority": 140,
+    "patterns": ["VENMO", "ZELLE", "CASH APP", "APPLE CASH SENT"],
+    "notes": "Mixes co-parenting payments, family repayments, and personal payments -- consider a subcategory/tag once real data shows the split, rather than inventing categories that don't reflect reality."
+  },
+  {
+    "category": "PayPal (misc)",
+    "matchType": "keyword",
+    "priority": 150,
+    "patterns": ["PAYPAL PYPL", "PAYPAL ADD TO BAL", "WITHDRAWAL FROM PAYPAL"]
+  },
+  {
+    "category": "Phone",
+    "matchType": "keyword",
+    "priority": 160,
+    "patterns": ["VERIZON WIRELESS", "T-MOBILE PCS SVC", "TMOBILE POSTPAID", "VZWRLSS"]
+  },
+  {
+    "category": "Gas/Fuel",
+    "matchType": "keyword",
+    "priority": 170,
+    "patterns": [
+      "ARCO", "CHEVRON", "SHELL", "COSTCO GAS", "MAVERIK", "G M OIL", "SUN VALLEY FUEL",
+      "EXPRESS FUEL", "FAST PUMPER", "HAN'S US PETROLEUM", "OCEANA GASOLINE", "VARSO GAS",
+      "UNITED PACIFIC", "MELROSE GAS", "SMITHS FUEL", "HOLIDAY OIL", "EXXON", "CARLSBAD GAS PROPANE"
+    ]
+  },
+  {
+    "category": "Dining/Fast Food",
+    "matchType": "keyword",
+    "priority": 180,
+    "patterns": [
+      "TACO BELL", "MCDONALD", "WENDY", "CHICK FIL A", "STARBUCKS", "DUTCH BROS", "DOORDASH",
+      "CHIPOTLE", "IN N OUT", "JACK IN THE BOX", "FIVE GUYS", "CARLS JR", "DOMINO",
+      "LITTLE CAESARS", "OLIVE GARDEN", "CHILI S", "AUNTIE ANNE", "DING TEA", "SLIM CHICKENS",
+      "HABIT", "COSTAVIDA", "CUPBOP", "MOBETTAHSHAWAIIAN", "WINGSTOP", "TASTY NOODLE",
+      "STREET TACOS", "YARD HOUSE", "WIENERSCHNITZEL"
+    ]
+  },
+  {
+    "category": "Groceries",
+    "matchType": "keyword",
+    "priority": 190,
+    "patterns": ["WALMART", "WAL-MART", "COSTCO WHSE", "VONS", "WINCO", "ALDI", "THE MARKET", "LUCKY SEAFOOD", "RALPHS"]
+  },
+  {
+    "category": "Subscriptions/Software",
+    "matchType": "keyword",
+    "priority": 200,
+    "patterns": [
+      "APPLE COM BILL", "MICROSOFT ULTIMATE", "PEACOCK", "DISNEY PLUS", "AUDIBLE", "KINDLE SVCS",
+      "AMAZON WEB SERVICES", "OPENAI CHATGPT", "VERCEL", "NVIDIA", "AMAZON PRIME",
+      "BEENVERIFIED", "TRUTHFINDER", "NOETICA AI"
+    ]
+  },
+  {
+    "category": "Insurance (Auto)",
+    "matchType": "keyword",
+    "priority": 210,
+    "patterns": ["GEICO", "ALLSTATE", "ROOT INSURANCE"]
+  },
+  {
+    "category": "Healthcare",
+    "matchType": "keyword",
+    "priority": 220,
+    "patterns": ["WAVE THERAPY", "VISIONWORKS"]
+  },
+  {
+    "category": "Personal Care",
+    "matchType": "keyword",
+    "priority": 230,
+    "patterns": ["SPORT CLIPS", "PRESTIGE NAILS", "BLVD BRAZILIA SKIN"]
+  },
+  {
+    "category": "Pet Expenses",
+    "matchType": "keyword",
+    "priority": 240,
+    "patterns": ["PETCO"]
+  },
+  {
+    "category": "Shopping/Retail",
+    "matchType": "keyword",
+    "priority": 250,
+    "patterns": [
+      "AMAZON MKTPL", "AMAZON.COM", "AMAZON COM", "TARGET", "ABERCROMBIE", "HOLLISTER",
+      "FASHION VALLEY", "PRINCESS POLL", "SEPHORA", "ADIDAS", "URBAN OUTFITTERS", "VANS"
+    ]
+  },
+  {
+    "category": "Entertainment/Travel",
+    "matchType": "keyword",
+    "priority": 260,
+    "patterns": ["DISNEYLAND", "FANDANGO", "DLR", "BIRCH AQUARIUM", "ENTERPRISE RENT A CAR", "REG CARLSBAD"]
+  },
+  {
+    "category": "Auto (non-fuel)",
+    "matchType": "keyword",
+    "priority": 270,
+    "patterns": ["DMV", "SOAPY JOE"]
+  },
+  {
+    "category": "Vending/Laundry",
+    "matchType": "keyword",
+    "priority": 280,
+    "patterns": ["CTLP CANTEEN", "CTLP CSC SERVICEWORKS"]
+  },
+  {
+    "category": "Bank Interest",
+    "matchType": "regex",
+    "priority": 290,
+    "patterns": ["(?=.*INTEREST)(?=.*PAID)"]
+  },
+  {
+    "category": "Misc Refund/Adjustment",
+    "matchType": "keyword",
+    "priority": 300,
+    "patterns": ["CHECKING CARD ADJUSTMENT"]
+  },
+  {
+    "category": "Postage/Shipping",
+    "matchType": "keyword",
+    "priority": 310,
+    "patterns": ["USPS"]
+  }
+]
