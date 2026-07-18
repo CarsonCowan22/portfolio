@@ -1,0 +1,114 @@
+.row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.info {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.meta {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.categoryInput,
+.patternInput {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.categoryInput {
+  min-width: 160px;
+}
+
+.patternInput {
+  min-width: 140px;
+}
+
+.ruleCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.saveButton,
+.flagButton {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.saveButton {
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--ink);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.flagButton {
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+}
+
+.flagButton[aria-pressed='true'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: auto 1fr;
+  }
+  .actions {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}

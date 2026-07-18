@@ -1,0 +1,136 @@
+.stack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.header {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.subhead {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.select,
+.search {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.search {
+  flex: 1;
+  min-width: 180px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.filterButton {
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 10px;
+  white-space: nowrap;
+  background: var(--surface);
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  vertical-align: top;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.negative {
+  color: var(--ink);
+}
+
+.positive {
+  color: var(--accent);
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
