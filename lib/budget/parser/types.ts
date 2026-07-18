@@ -8,6 +8,10 @@ export interface ParsedTransaction {
   amount: string;
   runningBalance: string | null;
   sourcePage: number;
+  /** Position within this statement's parse order. Two genuinely repeated transactions (same
+   * date/amount/description, e.g. two identical coffee purchases the same day) would otherwise
+   * hash to the same stable id and collide on upsert -- this keeps them distinct. */
+  sequence: number;
 }
 
 /**
@@ -21,9 +25,21 @@ export interface ParseGap {
   reason: string;
 }
 
+/** Opening/closing balance for one account section, read directly from its "Opening Balance" /
+ * "Closing Balance" lines -- never hand-entered, so there's nothing to mistype. */
+export interface AccountBalanceSummary {
+  account: string;
+  openingBalance: string | null;
+  closingBalance: string | null;
+}
+
 export interface BankStatementParseResult {
   transactions: ParsedTransaction[];
   gaps: ParseGap[];
+  accountSummaries: AccountBalanceSummary[];
+  /** Null if the "STATEMENT PERIOD" header couldn't be found -- transaction dates can't be
+   * resolved to a year without it, so the caller should treat this as a hard failure. */
+  period: StatementPeriod | null;
 }
 
 export interface StatementPeriod {

@@ -1,8 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseBankStatement } from '../bankStatement';
+import { detectStatementPeriod, parseBankStatement } from '../bankStatement';
 
 const PERIOD = { start: '2026-01-01', end: '2026-01-31' };
+const PERIOD_HEADER = 'STATEMENT PERIOD\nMay 1 - May 31, 2026';
 
 test('parses a single-line transaction under an account header', () => {
   const page = ['360 Checking - 1234', 'Jan 5 STARBUCKS COFFEE #123 -$6.75 Debit'].join('\n');
@@ -19,6 +20,7 @@ test('parses a single-line transaction under an account header', () => {
     amount: '-6.75',
     runningBalance: null,
     sourcePage: 1,
+    sequence: 0,
   });
 });
 
@@ -96,4 +98,108 @@ test('tracks source page across a multi-page statement', () => {
   assert.equal(transactions[0].sourcePage, 1);
   assert.equal(transactions[1].sourcePage, 2);
   assert.equal(transactions[1].account, '360 Checking');
+});
+
+test('detects the statement period from the repeated "STATEMENT PERIOD" header', () => {
+  const period = detectStatementPeriod([`Here's your bank statement.May 2026 ${PERIOD_HEADER}`]);
+  assert.deepEqual(period, { start: '2026-05-01', end: '2026-05-31' });
+});
+
+test('resolves a statement period header that spans a calendar year boundary', () => {
+  const period = detectStatementPeriod(['STATEMENT PERIOD\nDec 15 - Jan 14, 2025']);
+  assert.deepEqual(period, { start: '2025-12-15', end: '2026-01-14' });
+});
+
+test('auto-detects the period from the header when none is passed in', () => {
+  const page = [
+    PERIOD_HEADER,
+    '360 Checking - 36120269601',
+    'May 5 STARBUCKS COFFEE #123 -$6.75 Debit',
+  ].join('\n');
+
+  const { transactions, period } = parseBankStatement([page]);
+
+  assert.deepEqual(period, { start: '2026-05-01', end: '2026-05-31' });
+  assert.equal(transactions[0].date, '2026-05-05');
+});
+
+test('returns a gap and no transactions when the statement period header is missing entirely', () => {
+  const page = ['360 Checking - 36120269601', 'May 5 STARBUCKS COFFEE #123 -$6.75 Debit'].join('\n');
+
+  const { transactions, gaps, period } = parseBankStatement([page]);
+
+  assert.equal(period, null);
+  assert.equal(transactions.length, 0);
+  assert.equal(gaps.length, 1);
+  assert.match(gaps[0].reason, /STATEMENT PERIOD/);
+});
+
+test('reads Opening Balance / Closing Balance lines into accountSummaries instead of flagging them as gaps', () => {
+  const page = [
+    '360 Checking - 36120269601',
+    'May 1 Opening Balance $145.24',
+    'May 5 STARBUCKS COFFEE #123 -$6.75 Debit',
+    'May 31 Closing Balance $138.49',
+  ].join('\n');
+
+  const { transactions, gaps, accountSummaries } = parseBankStatement([page], { period: PERIOD });
+
+  assert.equal(transactions.length, 1);
+  assert.equal(gaps.length, 0);
+  assert.deepEqual(accountSummaries, [
+    { account: '360 Checking', openingBalance: '145.24', closingBalance: '138.49' },
+  ]);
+});
+
+test('skips "was Rejected" withdrawal attempts without flagging a gap (no balance impact)', () => {
+  const page = [
+    '360 Checking - 36120269601',
+    'May 1 Opening Balance $0.03',
+    'May 4 Withdrawal for $64.46 was Rejected $0.03',
+    'May 31 Closing Balance $0.03',
+  ].join('\n');
+
+  const { transactions, gaps } = parseBankStatement([page], { period: PERIOD });
+
+  assert.equal(transactions.length, 0);
+  assert.equal(gaps.length, 0);
+});
+
+test('keeps the sign on a negative (overdrawn) running balance', () => {
+  const page = [
+    '360 Checking - 36120269601',
+    'May 5 Digital Card Purchase - TARGET SAN DIEGO CA Debit - $55.53 - $26.33',
+  ].join('\n');
+
+  const { transactions } = parseBankStatement([page], { period: PERIOD });
+
+  assert.equal(transactions[0].amount, '-55.53');
+  assert.equal(transactions[0].runningBalance, '-26.33');
+});
+
+test('assigns a distinct sequence to two genuinely identical-looking transactions (same date/amount/merchant)', () => {
+  const page = [
+    '360 Checking - 36120269601',
+    'May 5 STARBUCKS COFFEE #123 -$6.75 Debit',
+    'May 5 STARBUCKS COFFEE #123 -$6.75 Debit',
+  ].join('\n');
+
+  const { transactions } = parseBankStatement([page], { period: PERIOD });
+
+  assert.equal(transactions.length, 2);
+  assert.notEqual(transactions[0].sequence, transactions[1].sequence);
+});
+
+test('skips an "Interest Rate Change" APY notice without flagging a gap', () => {
+  const page = [
+    '360 Performance Savings - 36187362671',
+    'May 1 Opening Balance $0.01',
+    'May 15 Interest Rate Change from 3.154% to 3.057% $0.01',
+    'May 31 Closing Balance $0.01',
+  ].join('\n');
+
+  const { transactions, gaps } = parseBankStatement([page], { period: PERIOD });
+
+  assert.equal(transactions.length, 0);
+  assert.equal(gaps.length, 0);
 });
