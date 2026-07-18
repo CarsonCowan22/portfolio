@@ -63,7 +63,7 @@ fetched or stored client-side, and the route is excluded from search indexing.
 - If the token is missing or GitHub is unreachable, each section degrades to an empty state
   instead of a hard error.
 
-**Required environment variables** (see `.env.local.example`), set in Vercel under Project
+**Required environment variables** (see `.env.example`), set in Vercel under Project
 Settings -> Environment Variables:
 
 | Variable | What it is |
@@ -73,3 +73,56 @@ Settings -> Environment Variables:
 | `JOB_HUNT_GH_TOKEN` | A **fine-grained** GitHub PAT scoped to only the `carson-job-hunt` repo, with **Contents: Read-only** permission and nothing else. Create at [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new). |
 
 Once those three are set (and the deploy picks them up), the dashboard works with no other setup.
+
+## Private budget tool (`/budget`, or `budget.<your-domain>`)
+
+A transaction-level budget/categorization tool: every dollar traces to a real, parsed transaction,
+and every category is either a deterministic rule match or a human-confirmed choice -- never a
+silent AI guess. Full design rationale in `lib/budget/`.
+
+**How it works:**
+
+- Bank statement PDFs are parsed **locally**, never uploaded to the deployed app: run
+  `pnpm budget:ingest <statement.pdf> --account "360 Checking" --period-start 2026-01-01 --period-end 2026-01-31 --opening 1234.56 --closing 987.65`
+  against a `DATABASE_URL` pointed at your Postgres instance. Parsing uses `unpdf` (no
+  `pdftotext`/poppler binary needed) and any line it can't confidently parse is reported, never
+  silently dropped or guessed.
+- Categorization runs against `category_rules` in Postgres (seeded from
+  `data/budget/seed-rules.json` via `pnpm budget:seed-rules`), first match wins by priority. A
+  transaction with no rule match is `needs_review`, full stop.
+- The web UI (`/budget/*`) is where you review `needs_review` transactions, confirm or correct a
+  category (optionally turning it into a rule so the same merchant never needs review again), edit
+  rules directly, and see per-statement reconciliation status (opening balance + parsed
+  transactions == closing balance, within $0.01 -- if not, that statement is flagged and its
+  numbers are excluded from being "final").
+- Auth mirrors the job-hunt dashboard (signed HMAC cookie via `middleware.ts`), but with its own
+  password/secret/cookie -- logging into one never grants access to the other.
+- `middleware.ts` also does hostname-based rewriting: on `budget.<your-domain>`, "/", "/review",
+  "/rules", "/transactions" behave as `/budget`, `/budget/review`, etc. On the main domain,
+  `/budget/*` works directly (handy for local dev without a second hostname).
+
+**Required environment variables** (see `.env.example`):
+
+| Variable | What it is |
+|---|---|
+| `DATABASE_URL` | A Postgres connection string (Neon or Vercel Postgres both work). |
+| `BUDGET_DASHBOARD_PASSWORD` | The password to enter the budget tool. |
+| `BUDGET_COOKIE_SECRET` | Random secret used to sign the auth cookie. Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. |
+
+**One-time setup, after the env vars above are set in Vercel:**
+
+```bash
+pnpm budget:migrate      # creates the transactions/statements/category_rules tables
+pnpm budget:seed-rules   # loads data/budget/seed-rules.json
+```
+
+**To actually get `budget.<your-domain>` working as a real subdomain:**
+
+1. Vercel project -> Settings -> Domains -> add `budget.<your-domain>`.
+2. At your DNS registrar, add the CNAME record Vercel shows you for that subdomain.
+3. Once DNS propagates, `budget.<your-domain>` serves the tool at clean paths (no `/budget` prefix
+   needed in the address bar).
+
+Running `pnpm budget:test` runs the parser/reconciliation/rules unit tests (Node's built-in test
+runner, no extra framework) against fixture text -- there's no substitute for verifying against a
+real statement on first ingest, since the parser was built without one to test against.
