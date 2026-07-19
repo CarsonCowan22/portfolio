@@ -1,0 +1,63 @@
+.chart {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 50px 1fr 90px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.label {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.track {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  height: 10px;
+  position: relative;
+}
+
+.expenseBar {
+  height: 100%;
+  background: var(--border2);
+  justify-self: end;
+  border-radius: 999px 0 0 999px;
+}
+
+.incomeBar {
+  height: 100%;
+  background: var(--accent);
+  justify-self: start;
+  border-radius: 0 999px 999px 0;
+}
+
+.centerLine {
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--border);
+}
+
+.net {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.netPositive {
+  color: var(--accent);
+}
+
+.netNegative {
+  color: var(--ink);
+}
