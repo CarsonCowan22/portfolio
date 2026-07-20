@@ -12,7 +12,10 @@ const USAGE = [
 ].join('\n');
 
 async function main() {
-  const arg = process.argv[2];
+  // `pnpm run <script> -- --list-accounts` inserts a literal "--" into argv ahead of the flag
+  // (visible in `tsx scripts/... "--" "--list-accounts"`) -- strip it so it's never mistaken for
+  // the setup token itself.
+  const arg = process.argv.slice(2).filter((a) => a !== '--')[0];
 
   if (!arg) {
     console.log(USAGE);

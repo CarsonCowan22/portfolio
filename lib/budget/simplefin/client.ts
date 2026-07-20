@@ -70,10 +70,14 @@ export async function fetchAccounts(input: FetchAccountsInput): Promise<SimpleFi
   if (input.balancesOnly) url.searchParams.set('balances-only', '1');
   for (const id of input.accountIds ?? []) url.searchParams.append('account', id);
 
-  const parsed = new URL(input.accessUrl);
-  const auth = Buffer.from(`${decodeURIComponent(parsed.username)}:${decodeURIComponent(parsed.password)}`).toString(
+  // Basic-auth credentials are embedded in the Access URL (user:pass@host); pull them for the
+  // Authorization header, then strip them from the URL itself -- undici's fetch() refuses to
+  // construct a Request from a URL that still has credentials in it.
+  const auth = Buffer.from(`${decodeURIComponent(url.username)}:${decodeURIComponent(url.password)}`).toString(
     'base64',
   );
+  url.username = '';
+  url.password = '';
 
   const response = await fetch(url.toString(), {
     headers: { Authorization: `Basic ${auth}` },
