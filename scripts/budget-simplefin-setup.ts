@@ -19,7 +19,8 @@ async function main() {
 
   if (!arg) {
     console.log(USAGE);
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
 
   if (arg === '--list-accounts') {
@@ -34,17 +35,21 @@ async function main() {
     }
     console.log('\nAdd the ones you want synced to SIMPLEFIN_ACCOUNT_MAP, e.g.:');
     console.log(`  SIMPLEFIN_ACCOUNT_MAP={"${accounts[0]?.id ?? 'ACT-...'}":"360 Checking"}`);
-    process.exit(0);
+    return;
   }
 
   const accessUrl = await claimSetupToken(arg);
   console.log('Claimed. Paste this into SIMPLEFIN_ACCESS_URL (.env.local and Vercel):\n');
   console.log(accessUrl);
   console.log('\nThen run: pnpm budget:simplefin:setup -- --list-accounts');
-  process.exit(0);
 }
 
 main().catch((error) => {
   console.error(error);
-  process.exit(1);
+  process.exitCode = 1;
 });
+
+// Letting the process exit naturally (rather than calling process.exit() right after a fetch())
+// avoids a Node/libuv crash on Windows where an undici keep-alive socket handle is still closing
+// when exit() forces immediate shutdown -- this script has nothing else pending once main()
+// resolves, so it exits on its own as soon as that handle clears.
