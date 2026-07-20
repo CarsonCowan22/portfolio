@@ -126,3 +126,36 @@ pnpm budget:seed-rules   # loads data/budget/seed-rules.json
 Running `pnpm budget:test` runs the parser/reconciliation/rules unit tests (Node's built-in test
 runner, no extra framework) against fixture text -- there's no substitute for verifying against a
 real statement on first ingest, since the parser was built without one to test against.
+
+### Live SimpleFIN sync (optional)
+
+PDF statements stay the source of truth for reconciliation, but once an account's history is
+ingested, [SimpleFIN](https://www.simplefin.org/) (via [SimpleFIN Bridge](https://beta-bridge.simplefin.org/),
+~$1.50/mo) can pull that account's new transactions automatically instead of downloading and
+running `pnpm budget:ingest` by hand. It never replaces reconciliation -- synced transactions just
+don't have a statement/opening-closing-balance record, same as any other row in the `needs_review`
+queue and rules pipeline. See `lib/budget/simplefin/` for the sync logic and the plan doc for the
+full design rationale (why it's additive, not a replacement).
+
+**One-time setup (do this yourself -- it links your real bank):**
+
+1. Sign up at [beta-bridge.simplefin.org](https://beta-bridge.simplefin.org/), connect Capital One,
+   and generate a Setup Token under "My Accounts" -> "Apps" -> "New Connection".
+2. `pnpm budget:simplefin:setup <setup-token>` -- claims the token, prints an Access URL. Paste it
+   into `SIMPLEFIN_ACCESS_URL` (`.env.local` and Vercel).
+3. `pnpm budget:simplefin:setup -- --list-accounts` -- lists every linked account's id/name/balance.
+   Build `SIMPLEFIN_ACCOUNT_MAP` from that output, e.g. `{"ACT-xxxx":"360 Checking"}` (only include
+   accounts you want synced; any linked account left out is reported, never guessed into a name).
+4. Generate a `CRON_SECRET` (same `randomBytes` command as the other secrets) and set it in Vercel
+   -- Vercel Cron sends it automatically as `Authorization: Bearer ${CRON_SECRET}` when it calls
+   `/api/budget/sync` on the schedule in `vercel.json` (daily). "Sync now" on the Overview page
+   triggers the same sync on demand.
+
+**Environment variables** (see `.env.example`):
+
+| Variable | What it is |
+|---|---|
+| `SIMPLEFIN_ACCESS_URL` | The Access URL from step 2 above. Contains embedded credentials -- treat it like `DATABASE_URL`. |
+| `SIMPLEFIN_ACCOUNT_MAP` | JSON string mapping SimpleFIN account id -> the account name already used in the database. |
+| `CRON_SECRET` | Random secret Vercel Cron sends back to authenticate its own requests to `/api/budget/sync`. |
+| `SIMPLEFIN_INITIAL_LOOKBACK_DAYS` | Optional, default 30. Only used the first time a mapped account has no PDF or prior-sync history to pick a start date from. |
