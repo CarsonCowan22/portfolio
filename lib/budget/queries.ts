@@ -1,6 +1,7 @@
 import { In, Not } from 'typeorm';
 import { getBudgetDataSource } from './dataSource';
 import { ARCHIVED_ACCOUNTS } from './constants';
+import { toDateString } from './format';
 import type { CategoryRule } from './entities/CategoryRule';
 import type { Statement } from './entities/Statement';
 import type { Transaction } from './entities/Transaction';
@@ -57,6 +58,26 @@ export async function getDistinctAccounts(): Promise<string[]> {
     .orderBy('t.account', 'ASC')
     .getRawMany();
   return rows.map((row) => row.account);
+}
+
+export interface AccountFreshness {
+  account: string;
+  /** Latest transaction date on file for this account, from any source (PDF or SimpleFIN) --
+   * null if the account has no transactions yet. */
+  latestDate: string | null;
+}
+
+/** Backs the Overview page's "Live sync" card -- freshness is derived from existing data, not a
+ * separately-tracked sync cursor. */
+export async function getAccountFreshness(accounts: string[]): Promise<AccountFreshness[]> {
+  const dataSource = await getBudgetDataSource();
+  const repo = dataSource.getRepository<Transaction>('Transaction');
+  const results: AccountFreshness[] = [];
+  for (const account of accounts) {
+    const latest = await repo.findOne({ where: { account }, order: { date: 'DESC' } });
+    results.push({ account, latestDate: latest ? toDateString(latest.date) : null });
+  }
+  return results;
 }
 
 export interface TransactionFilters {

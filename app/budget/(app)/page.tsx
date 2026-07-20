@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { getNeedsReviewCount, getStatements } from '@/lib/budget/queries';
+import { getAccountFreshness, getNeedsReviewCount, getStatements } from '@/lib/budget/queries';
 import ReconciliationCard from '@/components/Budget/ReconciliationCard';
+import SimpleFinSyncCard from '@/components/Budget/SimpleFinSyncCard';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -14,8 +15,25 @@ const CAVEATS = [
   '360 Checking and 360 Performance Savings are closed accounts -- excluded from every view/total here (see lib/budget/constants.ts), but their historical transactions are still in the database, untouched.',
 ];
 
+function readSimpleFinAccountNames(): string[] {
+  const raw = process.env.SIMPLEFIN_ACCOUNT_MAP;
+  if (!raw) return [];
+  try {
+    return Object.values(JSON.parse(raw) as Record<string, string>);
+  } catch {
+    return [];
+  }
+}
+
 export default async function BudgetOverviewPage() {
-  const [statements, needsReviewCount] = await Promise.all([getStatements(), getNeedsReviewCount()]);
+  const simpleFinConfigured = !!process.env.SIMPLEFIN_ACCESS_URL;
+  const simpleFinAccounts = readSimpleFinAccountNames();
+
+  const [statements, needsReviewCount, accountFreshness] = await Promise.all([
+    getStatements(),
+    getNeedsReviewCount(),
+    simpleFinConfigured && simpleFinAccounts.length > 0 ? getAccountFreshness(simpleFinAccounts) : Promise.resolve([]),
+  ]);
 
   const unreconciled = statements.filter((s) => !s.reconciled && !s.verifiedByHuman);
 
@@ -50,6 +68,8 @@ export default async function BudgetOverviewPage() {
           Review {needsReviewCount} uncategorized transaction{needsReviewCount === 1 ? '' : 's'} →
         </Link>
       ) : null}
+
+      <SimpleFinSyncCard configured={simpleFinConfigured} accounts={accountFreshness} />
 
       <section className={styles.section}>
         <h2 className={styles.sectionHeading}>Statements</h2>
