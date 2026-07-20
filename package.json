@@ -11,7 +11,8 @@
     "budget:migration:generate": "typeorm-ts-node-commonjs migration:generate -d lib/budget/dataSource.ts",
     "budget:seed-rules": "tsx scripts/budget-seed-rules.ts",
     "budget:ingest": "tsx scripts/budget-ingest.ts",
-    "budget:test": "tsx --test lib/budget/__tests__/*.test.ts lib/budget/parser/__tests__/*.test.ts"
+    "budget:test": "tsx --test lib/budget/__tests__/*.test.ts lib/budget/parser/__tests__/*.test.ts lib/budget/simplefin/__tests__/*.test.ts",
+    "budget:simplefin:setup": "tsx scripts/budget-simplefin-setup.ts"
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.2.8",
