@@ -24,6 +24,7 @@ export interface Transaction {
   runningBalance: string | null;
   internalTransfer: boolean;
   category: string | null;
+  subcategory: string | null;
   categorySource: CategorySource | null;
   categoryRule: CategoryRule | null;
   suggestedCategory: string | null;
@@ -55,6 +56,7 @@ export const TransactionEntity = new EntitySchema<Transaction>({
     runningBalance: { name: 'running_balance', type: 'numeric', precision: 12, scale: 2, nullable: true },
     internalTransfer: { name: 'internal_transfer', type: 'boolean', default: false },
     category: { type: 'text', nullable: true },
+    subcategory: { type: 'text', nullable: true },
     categorySource: { name: 'category_source', type: 'varchar', length: 24, nullable: true },
     suggestedCategory: { name: 'suggested_category', type: 'text', nullable: true },
     suggestedBy: { name: 'suggested_by', type: 'text', nullable: true },

@@ -1,0 +1,50 @@
+[
+  {
+    "creditor": "Capital One QuicksilverOne (...6027)",
+    "balance": "312.00",
+    "monthlyPayment": "104.00",
+    "status": "Settled -- 3 payments of $104, account closes after the final one",
+    "notes": null,
+    "payments": [
+      { "dueDate": "2026-07-27", "amount": "104.00" },
+      { "dueDate": "2026-08-28", "amount": "104.00" },
+      { "dueDate": "2026-09-27", "amount": "104.00" }
+    ]
+  },
+  {
+    "creditor": "Capital One Quicksilver (...9175)",
+    "balance": "786.00",
+    "monthlyPayment": "262.00",
+    "status": "3-month payment plan",
+    "notes": null,
+    "payments": [
+      { "dueDate": "2026-08-17", "amount": "262.00" },
+      { "dueDate": "2026-09-17", "amount": "262.00" },
+      { "dueDate": "2026-10-17", "amount": "262.00" }
+    ]
+  },
+  {
+    "creditor": "Honda Financial (repossessed HR-V)",
+    "balance": null,
+    "monthlyPayment": null,
+    "status": "Repossessed, pending auction",
+    "notes": "Closes after the auction -- the remaining balance becomes a deficiency negotiation, not an ongoing loan payment.",
+    "payments": []
+  },
+  {
+    "creditor": "Hughes FCU (Zoe's XC90)",
+    "balance": null,
+    "monthlyPayment": null,
+    "status": "Active loan, in Carson's name",
+    "notes": "Zoe's vehicle -- Zoe makes the payments. Confirm whether Carson is reimbursed for the amount that debits his account.",
+    "payments": []
+  },
+  {
+    "creditor": "EdFinancial (student loans)",
+    "balance": "13595.00",
+    "monthlyPayment": null,
+    "status": "Deferred until September 2026",
+    "notes": null,
+    "payments": []
+  }
+]

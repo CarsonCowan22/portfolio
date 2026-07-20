@@ -2,8 +2,13 @@
 
 import { revalidatePath } from 'next/cache';
 import { getBudgetDataSource } from '@/lib/budget/dataSource';
-import type { CategoryRule } from '@/lib/budget/entities/CategoryRule';
+import { previewRulePattern, type RulePatternPreview } from '@/lib/budget/queries';
+import type { CategoryRule, CategoryRuleMatchType } from '@/lib/budget/entities/CategoryRule';
 import type { Transaction } from '@/lib/budget/entities/Transaction';
+
+export async function previewPattern(matchType: CategoryRuleMatchType, pattern: string): Promise<RulePatternPreview> {
+  return previewRulePattern(matchType, pattern);
+}
 
 function revalidateBudgetPages() {
   revalidatePath('/budget');
@@ -15,6 +20,7 @@ function revalidateBudgetPages() {
 export async function categorizeTransaction(input: {
   id: string;
   category: string;
+  subcategory?: string;
   createRule?: { pattern: string; matchType: 'keyword' | 'regex'; priority: number };
 }) {
   const dataSource = await getBudgetDataSource();
@@ -42,6 +48,7 @@ export async function categorizeTransaction(input: {
 
     await manager.getRepository<Transaction>('Transaction').update(input.id, {
       category: input.category,
+      subcategory: input.subcategory?.trim() || null,
       categorySource: 'manual',
       categoryRule: ruleId ? ({ id: ruleId } as CategoryRule) : null,
       needsReview: false,

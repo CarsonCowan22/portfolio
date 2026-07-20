@@ -2,7 +2,12 @@
 
 import { revalidatePath } from 'next/cache';
 import { getBudgetDataSource } from '@/lib/budget/dataSource';
+import { previewRulePattern, type RulePatternPreview } from '@/lib/budget/queries';
 import type { CategoryRule, CategoryRuleMatchType } from '@/lib/budget/entities/CategoryRule';
+
+export async function previewPattern(matchType: CategoryRuleMatchType, pattern: string): Promise<RulePatternPreview> {
+  return previewRulePattern(matchType, pattern);
+}
 
 function revalidateBudgetPages() {
   revalidatePath('/budget');

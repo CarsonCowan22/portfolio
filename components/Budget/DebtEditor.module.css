@@ -1,6 +1,24 @@
 .wrap {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
+}
+
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeading {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 400;
+}
+
+.empty {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .addForm {
@@ -14,8 +32,7 @@
 }
 
 .input,
-.select,
-.priorityInput {
+.select {
   padding: 0.55rem 0.75rem;
   border: 1px solid var(--border2);
   border-radius: 8px;
@@ -23,15 +40,8 @@
   color: var(--ink);
   font-family: var(--font-mono), monospace;
   font-size: 12px;
-}
-
-.input {
   flex: 1;
-  min-width: 140px;
-}
-
-.priorityInput {
-  width: 80px;
+  min-width: 120px;
 }
 
 .addButton {
@@ -50,46 +60,6 @@
 .addButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.warnButton {
-  padding: 0.55rem 1rem;
-  border-radius: 999px;
-  border: 1px solid #b45309;
-  background: transparent;
-  color: #b45309;
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.warnButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.patternGroup {
-  flex: 1;
-  min-width: 140px;
-  display: grid;
-  gap: 0.25rem;
-}
-
-.patternGroup .input {
-  min-width: 0;
-}
-
-.preview {
-  margin: 0;
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  color: var(--muted);
-}
-
-.previewWarning {
-  color: #b45309;
 }
 
 .tableWrap {
@@ -130,7 +100,21 @@
 }
 
 .mono {
+  font-family: var(--font-mono), monospace;
+}
+
+.notes {
   color: var(--muted);
+  max-width: 32ch;
+  font-size: 11px;
+}
+
+.soon {
+  color: #eab308;
+}
+
+.overdue {
+  color: #f87171;
 }
 
 .rowActions {

@@ -3,6 +3,8 @@ import path from 'node:path';
 import { DataSource } from 'typeorm';
 import { BudgetTargetEntity } from './entities/BudgetTarget';
 import { CategoryRuleEntity } from './entities/CategoryRule';
+import { DebtEntity } from './entities/Debt';
+import { DebtPaymentEntity } from './entities/DebtPayment';
 import { StatementEntity } from './entities/Statement';
 import { TransactionEntity } from './entities/Transaction';
 
@@ -18,7 +20,7 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [TransactionEntity, CategoryRuleEntity, StatementEntity, BudgetTargetEntity],
+  entities: [TransactionEntity, CategoryRuleEntity, StatementEntity, BudgetTargetEntity, DebtEntity, DebtPaymentEntity],
   migrations: [path.join(__dirname, 'migrations', '*.{ts,js}')],
 });
 

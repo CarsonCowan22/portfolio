@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { href: '/budget', label: 'Overview' },
   { href: '/budget/spending', label: 'Spending' },
   { href: '/budget/cashflow', label: 'Cash Flow' },
+  { href: '/budget/debts', label: 'Debts' },
   { href: '/budget/review', label: 'Review' },
   { href: '/budget/rules', label: 'Rules' },
   { href: '/budget/transactions', label: 'Transactions' },

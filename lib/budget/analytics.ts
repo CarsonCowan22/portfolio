@@ -10,6 +10,12 @@ import { fromCents, toCents } from './money';
  */
 const EXCLUDE_CLAUSE = 'internal_transfer = false AND NOT (account = ANY($1))';
 
+/** "YYYY-MM" for today, server clock -- fine for a single-user personal tool. */
+export function getCurrentMonthString(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
+
 export async function getAvailableMonths(): Promise<string[]> {
   const dataSource = await getBudgetDataSource();
   const rows: { month: string }[] = await dataSource.query(
