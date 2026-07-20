@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getAvailableMonths, getSpendingByCategory } from '@/lib/budget/analytics';
+import { getAvailableMonths, getCurrentMonthString, getSpendingByCategory } from '@/lib/budget/analytics';
 import CategoryBarChart from '@/components/Budget/CategoryBarChart';
 import SpendingTable from '@/components/Budget/SpendingTable';
 import styles from './page.module.css';
@@ -15,6 +15,15 @@ function formatMonthLabel(month: string): string {
     year: 'numeric',
     timeZone: 'UTC',
   });
+}
+
+/** Only meaningful when browsing the actual current calendar month, not a historical month
+ * reached via the month nav -- otherwise "60% through the month" would be nonsense. */
+function currentMonthProgressPct(month: string): number | null {
+  if (month !== getCurrentMonthString()) return null;
+  const now = new Date();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  return Math.round((now.getDate() / daysInMonth) * 100);
 }
 
 export default async function SpendingPage({ searchParams }: { searchParams: { month?: string } }) {
@@ -37,6 +46,7 @@ export default async function SpendingPage({ searchParams }: { searchParams: { m
   const totalActual = rows.reduce((sum, row) => sum + Number(row.actual), 0);
   const totalTarget = rows.reduce((sum, row) => sum + (row.target ? Number(row.target) : 0), 0);
   const hasAnyTarget = rows.some((row) => row.target !== null);
+  const monthProgressPct = currentMonthProgressPct(month);
 
   const monthIndex = availableMonths.indexOf(month);
   const olderMonth = availableMonths[monthIndex + 1];
@@ -80,6 +90,12 @@ export default async function SpendingPage({ searchParams }: { searchParams: { m
             <p className={styles.tileLabel}>Total budgeted</p>
           </div>
         ) : null}
+        {monthProgressPct !== null ? (
+          <div className={styles.tile}>
+            <p className={styles.tileValue}>{monthProgressPct}%</p>
+            <p className={styles.tileLabel}>Through the month</p>
+          </div>
+        ) : null}
       </div>
 
       {rows.length === 0 ? (
@@ -97,7 +113,7 @@ export default async function SpendingPage({ searchParams }: { searchParams: { m
               "Suggested" is the historical monthly average across every month with data -- a statistic, not a
               guess. It only becomes a target when you click "Use suggested."
             </p>
-            <SpendingTable rows={rows} />
+            <SpendingTable rows={rows} monthProgressPct={monthProgressPct} />
           </section>
         </>
       )}

@@ -116,6 +116,59 @@
   color: var(--muted);
 }
 
+.overRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  background: var(--surface);
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border);
+}
+
+.overRow:last-child {
+  border-bottom: none;
+}
+
+.overRow:hover,
+.overRow:focus-visible {
+  color: var(--accent);
+}
+
+.overAmount {
+  color: #f87171;
+}
+
+.dataHealth {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+}
+
+.dataHealthSummary {
+  cursor: pointer;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.5rem 0;
+}
+
+.dataHealthSummary:hover,
+.dataHealthSummary:focus-visible {
+  color: var(--ink);
+}
+
+.dataHealthBody {
+  display: grid;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: 1fr;

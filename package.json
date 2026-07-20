@@ -10,6 +10,8 @@
     "budget:migrate": "tsx scripts/budget-migrate.ts",
     "budget:migration:generate": "typeorm-ts-node-commonjs migration:generate -d lib/budget/dataSource.ts",
     "budget:seed-rules": "tsx scripts/budget-seed-rules.ts",
+    "budget:cleanup-generic-rules": "tsx scripts/budget-cleanup-generic-rules.ts",
+    "budget:seed-debts": "tsx scripts/budget-seed-debts.ts",
     "budget:ingest": "tsx scripts/budget-ingest.ts",
     "budget:test": "tsx --test lib/budget/__tests__/*.test.ts lib/budget/parser/__tests__/*.test.ts lib/budget/simplefin/__tests__/*.test.ts",
     "budget:simplefin:setup": "tsx scripts/budget-simplefin-setup.ts"

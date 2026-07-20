@@ -59,6 +59,23 @@
   min-width: 140px;
 }
 
+.patternGroup {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.preview {
+  margin: 0;
+  max-width: 260px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.previewWarning {
+  color: #b45309;
+}
+
 .ruleCheckbox {
   display: flex;
   align-items: center;
@@ -87,9 +104,23 @@
   color: var(--ink);
 }
 
-.saveButton:disabled {
+.saveButton:disabled,
+.warnButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.warnButton {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid #b45309;
+  background: transparent;
+  color: #b45309;
 }
 
 .flagButton {

@@ -111,6 +111,7 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
                     suggestedCategory={transaction.suggestedCategory}
                     needsReview={transaction.needsReview}
                   />
+                  {transaction.subcategory ? <span className={styles.subcategoryPill}>{transaction.subcategory}</span> : null}
                 </td>
               </tr>
             ))}

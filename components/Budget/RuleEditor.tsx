@@ -1,8 +1,37 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { createRule, deleteRule, updateRule, type RuleInput } from '@/app/budget/(app)/rules/actions';
+import { useEffect, useState, useTransition } from 'react';
+import { createRule, deleteRule, previewPattern, updateRule, type RuleInput } from '@/app/budget/(app)/rules/actions';
+import type { RulePatternPreview } from '@/lib/budget/queries';
 import styles from './RuleEditor.module.css';
+
+function usePatternPreview(matchType: RuleInput['matchType'], pattern: string): RulePatternPreview | null {
+  const [preview, setPreview] = useState<RulePatternPreview | null>(null);
+
+  useEffect(() => {
+    const trimmed = pattern.trim();
+    if (!trimmed) {
+      setPreview(null);
+      return;
+    }
+    const timer = setTimeout(() => {
+      previewPattern(matchType, trimmed).then(setPreview);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [matchType, pattern]);
+
+  return preview;
+}
+
+function PatternPreviewText({ preview }: { preview: RulePatternPreview | null }) {
+  if (!preview) return null;
+  return (
+    <p className={[styles.preview, preview.broad ? styles.previewWarning : ''].join(' ')}>
+      Matches {preview.matchCount} of {preview.totalTransactionCount} transactions
+      {preview.distinctCategories.length > 0 ? ` across: ${preview.distinctCategories.join(', ')}` : ''}
+    </p>
+  );
+}
 
 export interface RuleDTO {
   id: number;
@@ -21,6 +50,7 @@ export default function RuleEditor({ rules }: { rules: RuleDTO[] }) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newRule, setNewRule] = useState<RuleInput>(EMPTY_FORM);
   const [isPending, startTransition] = useTransition();
+  const newRulePreview = usePatternPreview(newRule.matchType, newRule.pattern);
 
   const handleCreate = () => {
     if (!newRule.category.trim() || !newRule.pattern.trim()) return;
@@ -59,12 +89,15 @@ export default function RuleEditor({ rules }: { rules: RuleDTO[] }) {
           <option value="keyword">keyword</option>
           <option value="regex">regex</option>
         </select>
-        <input
-          className={styles.input}
-          placeholder="Pattern"
-          value={newRule.pattern}
-          onChange={(event) => setNewRule({ ...newRule, pattern: event.target.value })}
-        />
+        <div className={styles.patternGroup}>
+          <input
+            className={styles.input}
+            placeholder="Pattern"
+            value={newRule.pattern}
+            onChange={(event) => setNewRule({ ...newRule, pattern: event.target.value })}
+          />
+          <PatternPreviewText preview={newRulePreview} />
+        </div>
         <input
           className={styles.priorityInput}
           type="number"
@@ -72,12 +105,12 @@ export default function RuleEditor({ rules }: { rules: RuleDTO[] }) {
           onChange={(event) => setNewRule({ ...newRule, priority: Number(event.target.value) })}
         />
         <button
-          className={styles.addButton}
+          className={newRulePreview?.broad ? styles.warnButton : styles.addButton}
           type="button"
           disabled={isPending || !newRule.category.trim() || !newRule.pattern.trim()}
           onClick={handleCreate}
         >
-          Add rule
+          {newRulePreview?.broad ? 'Add anyway ⚠' : 'Add rule'}
         </button>
       </div>
 
@@ -157,6 +190,7 @@ function RuleEditRow({
     priority: rule.priority,
     notes: rule.notes ?? '',
   });
+  const preview = usePatternPreview(form.matchType, form.pattern);
 
   return (
     <tr>
@@ -182,7 +216,10 @@ function RuleEditRow({
         </select>
       </td>
       <td>
-        <input className={styles.input} value={form.pattern} onChange={(event) => setForm({ ...form, pattern: event.target.value })} />
+        <div className={styles.patternGroup}>
+          <input className={styles.input} value={form.pattern} onChange={(event) => setForm({ ...form, pattern: event.target.value })} />
+          <PatternPreviewText preview={preview} />
+        </div>
       </td>
       <td className={styles.mono}>{rule.createdBy}</td>
       <td className={styles.rowActions}>

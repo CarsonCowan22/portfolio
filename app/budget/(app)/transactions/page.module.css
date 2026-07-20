@@ -123,6 +123,16 @@
   color: var(--ink);
 }
 
+.subcategoryPill {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
 .positive {
   color: var(--accent);
 }
