@@ -83,10 +83,13 @@ silent AI guess. Full design rationale in `lib/budget/`.
 **How it works:**
 
 - Bank statement PDFs are parsed **locally**, never uploaded to the deployed app: run
-  `pnpm budget:ingest <statement.pdf> --account "360 Checking" --period-start 2026-01-01 --period-end 2026-01-31 --opening 1234.56 --closing 987.65`
-  against a `DATABASE_URL` pointed at your Postgres instance. Parsing uses `unpdf` (no
+  `pnpm budget:ingest <statement.pdf>` against a `DATABASE_URL` pointed at your Postgres instance.
+  The statement period and each account's opening/closing balance are auto-detected from the PDF
+  text (`lib/budget/parser/bankStatement.ts`) -- no manual flags needed. Parsing uses `unpdf` (no
   `pdftotext`/poppler binary needed) and any line it can't confidently parse is reported, never
-  silently dropped or guessed.
+  silently dropped or guessed. If the PDF is a credit card statement rather than a bank statement,
+  the script instead prints an account-summary (new balance, minimum payment, due date, APR)
+  without writing anything to the database.
 - Categorization runs against `category_rules` in Postgres (seeded from
   `data/budget/seed-rules.json` via `pnpm budget:seed-rules`), first match wins by priority. A
   transaction with no rule match is `needs_review`, full stop.
