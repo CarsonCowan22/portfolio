@@ -8,8 +8,6 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,

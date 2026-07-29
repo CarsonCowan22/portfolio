@@ -6,36 +6,21 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "budget:migrate": "tsx scripts/budget-migrate.ts",
-    "budget:migration:generate": "typeorm-ts-node-commonjs migration:generate -d lib/budget/dataSource.ts",
-    "budget:seed-rules": "tsx scripts/budget-seed-rules.ts",
-    "budget:cleanup-generic-rules": "tsx scripts/budget-cleanup-generic-rules.ts",
-    "budget:seed-debts": "tsx scripts/budget-seed-debts.ts",
-    "budget:ingest": "tsx scripts/budget-ingest.ts",
-    "budget:test": "tsx --test lib/budget/__tests__/*.test.ts lib/budget/parser/__tests__/*.test.ts lib/budget/simplefin/__tests__/*.test.ts",
-    "budget:simplefin:setup": "tsx scripts/budget-simplefin-setup.ts"
+    "start": "next start"
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.2.8",
     "@fontsource/instrument-serif": "^5.2.8",
     "@vercel/analytics": "^2.0.1",
-    "dotenv": "^16.4.7",
     "next": "^14.0.0",
-    "pg": "^8.13.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.20",
-    "unpdf": "^0.12.1"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@types/pg": "^8.11.10",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "sharp": "^0.34.5",
-    "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
 }
