@@ -19,10 +19,10 @@ const projects = [
     placeholderPath: '/images/www.privix.com_project-details.png',
   },
   {
-    eyebrow: '02 — FINTECH / FOUNDER',
+    eyebrow: '02 — FINTECH / FULL-STACK',
     title: 'Payedia',
     description:
-      'Personal finance app that answers one question: what can I actually spend right now? Bank-linked balances, bill tracking, budgets, and a 30-day cash-flow forecast, built solo from schema to production.',
+      'Personal finance app that answers one question: what can I actually spend right now? Bank-linked balances, bill tracking, budgets, and a 30-day cash-flow forecast.',
     bullets: [
       'Integrated Quiltt bank linking end to end: session proxy, signed webhooks, paginated transaction sync, and cross-user isolation enforced at the database.',
       'Made money-moving writes atomic in Postgres, so paying a bill and updating safe-to-spend can never drift apart.',
