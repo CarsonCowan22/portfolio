@@ -19,7 +19,29 @@ const projects = [
     placeholderPath: '/images/www.privix.com_project-details.png',
   },
   {
-    eyebrow: '02 — WEB',
+    eyebrow: '02 — FINTECH / FOUNDER',
+    title: 'Payedia',
+    description:
+      'Personal finance app that answers one question: what can I actually spend right now? Bank-linked balances, bill tracking, budgets, and a 30-day cash-flow forecast, built solo from schema to production.',
+    bullets: [
+      'Integrated Quiltt bank linking end to end: session proxy, signed webhooks, paginated transaction sync, and cross-user isolation enforced at the database.',
+      'Made money-moving writes atomic in Postgres, so paying a bill and updating safe-to-spend can never drift apart.',
+      'Run staging and production as separate Vercel environments, with Vitest and Playwright suites and every PR reviewed before merge.',
+    ],
+    stack: ['Next.js', 'TypeScript', 'Supabase', 'PostgreSQL', 'Quiltt', 'Vercel'],
+    placeholderDescription: 'Payedia dashboard, budget, forecast, and bills screens from the public demo',
+    placeholderDimensions: '1440×900px screenshots',
+    placeholderPath: [
+      '/images/payedia-dashboard.png',
+      '/images/payedia-budget.png',
+      '/images/payedia-forecasting.png',
+      '/images/payedia-bills.png',
+    ],
+    link: { href: 'https://payedia.com/demo', label: 'Try the live demo' },
+    reverse: true,
+  },
+  {
+    eyebrow: '03 — WEB',
     title: 'TEC Solar Website',
     description:
       'Engineering firm marketing site with modular architecture for future expansion into a client-facing project portal. Responsive design and scalable routing.',
@@ -32,10 +54,9 @@ const projects = [
     placeholderDescription: 'TEC Solar homepage or full-page screenshot',
     placeholderDimensions: '1400×900px minimum',
     placeholderPath: '/images/www.tecsolar.net_home.png',
-    reverse: true,
   },
   {
-    eyebrow: '03 — INTERNAL TOOLS',
+    eyebrow: '04 — INTERNAL TOOLS',
     title: 'CAD Workflow Automation',
     description:
       'Windows scripting automation that eliminated hours of manual copy-paste each day for a 30-person CAD engineering department. Built before a CS degree because the process needed fixing.',
@@ -48,6 +69,7 @@ const projects = [
     placeholderDescription: 'Permit-ready CAD plan set or before/after workflow comparison',
     placeholderDimensions: 'High-resolution comparison or plan set',
     placeholderPath: ['/images/cad-automation-1.png', '/images/cad-automation-2.png'],
+    reverse: true,
   },
 ] as const;
 

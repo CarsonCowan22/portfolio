@@ -20,6 +20,9 @@ Minimum asset sizes:
 - `privix.jpg` - 1200×800px minimum
 - `tec-solar.jpg` - 1400×900px minimum
 - `cad-automation.jpg` - use a permit-ready CAD plan set or a before/after workflow comparison
+- `payedia-*.png` - 1440×900 screenshots of the Payedia public demo (`/demo`, `/demo/budget`, `/demo/forecasting`, `/demo/bills`)
+
+After adding or replacing a source image, list it in `scripts/optimize-images.js` and run `node scripts/optimize-images.js` to regenerate the WebP/PNG variants in `/public/images/optimized/`.
 
 The placeholder copy in the site already documents the expected image path and dimensions.
 

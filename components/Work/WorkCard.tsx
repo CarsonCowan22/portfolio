@@ -13,6 +13,7 @@ type WorkCardProps = {
   placeholderDescription: string;
   placeholderDimensions: string;
   placeholderPath: string | readonly string[];
+  link?: { href: string; label: string };
   reverse?: boolean;
 };
 
@@ -190,6 +191,7 @@ export default function WorkCard({
   placeholderDescription,
   placeholderDimensions,
   placeholderPath,
+  link,
   reverse = false,
 }: WorkCardProps) {
   return (
@@ -212,6 +214,12 @@ export default function WorkCard({
             </span>
           ))}
         </div>
+
+        {link ? (
+          <a className={styles.link} href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label} ↗
+          </a>
+        ) : null}
       </div>
 
       <div className={styles.media}>

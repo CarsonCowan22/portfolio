@@ -7,6 +7,10 @@ const images = [
   'public/images/www.tecsolar.net_home.png',
   'public/images/cad-automation-1.png',
   'public/images/cad-automation-2.png',
+  'public/images/payedia-dashboard.png',
+  'public/images/payedia-budget.png',
+  'public/images/payedia-forecasting.png',
+  'public/images/payedia-bills.png',
 ];
 const sizes = [800, 1200, 1400];
 const outDir = 'public/images/optimized';
