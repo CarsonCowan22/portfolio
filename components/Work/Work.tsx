@@ -6,6 +6,7 @@ const projects = [
   {
     eyebrow: '01 — SaaS / FOUNDING ENGINEER',
     title: 'Privix',
+    credit: 'Founding Engineer at Privix',
     description:
       'Multi-tenant SaaS platform for home improvement financing. Schema-level tenant isolation, stateless APIs, full-stack RBAC, and third-party credit plus loan document integrations.',
     bullets: [
@@ -19,8 +20,9 @@ const projects = [
     placeholderPath: '/images/www.privix.com_project-details.png',
   },
   {
-    eyebrow: '02 — FINTECH / FULL-STACK',
+    eyebrow: '02 — FINTECH / LEAD DEVELOPER',
     title: 'Payedia',
+    credit: 'Lead Developer at Payedia',
     description:
       'Personal finance app that answers one question: what can I actually spend right now? Bank-linked balances, bill tracking, budgets, and a 30-day cash-flow forecast.',
     bullets: [

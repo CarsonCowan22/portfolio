@@ -7,6 +7,7 @@ import styles from './WorkCard.module.css';
 type WorkCardProps = {
   eyebrow: string;
   title: string;
+  credit?: string;
   description: string;
   bullets: readonly string[];
   stack: readonly string[];
@@ -185,6 +186,7 @@ function Carousel({ images, alt }: { images: readonly string[]; alt: string }) {
 export default function WorkCard({
   eyebrow,
   title,
+  credit,
   description,
   bullets,
   stack,
@@ -199,6 +201,11 @@ export default function WorkCard({
       <div className={styles.content}>
         <p className={styles.eyebrow}>{eyebrow}</p>
         <h3 className={styles.title}>{title}</h3>
+        {credit ? (
+          <p className={styles.credit}>
+            <span className={styles.creditLabel}>Role</span> {credit}
+          </p>
+        ) : null}
         <p className={styles.description}>{description}</p>
 
         <ul className={styles.bullets}>

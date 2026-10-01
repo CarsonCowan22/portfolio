@@ -43,6 +43,21 @@
   line-height: 1.05;
 }
 
+.credit {
+  margin: -0.4rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.creditLabel {
+  margin-right: 0.5rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
 .description {
   margin: 0;
   font-family: var(--font-mono), monospace;

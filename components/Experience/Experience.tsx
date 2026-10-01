@@ -3,6 +3,11 @@ import styles from './Experience.module.css';
 
 const roles = [
   {
+    company: 'Payedia',
+    role: 'Lead Developer',
+    date: 'Jun 2026 – Present',
+  },
+  {
     company: 'Privix',
     role: 'Founding Engineer',
     date: 'Jun 2025 – Present',
